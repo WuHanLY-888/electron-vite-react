@@ -6,6 +6,8 @@ build/win-ia32-unpacked/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.gitignore
+.npmrc
 
 # Editor directories and files
 .idea

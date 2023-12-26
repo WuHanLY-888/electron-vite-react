@@ -1,6 +1,6 @@
 import { useRoutes } from 'react-router-dom'
 import router from './router'
-import TitleBar from './components/titleBar'
+// import TitleBar from './components/titleBar'
 // import BeforeEnter from './router/beforeEnter';
 
 function BeforeEnter() {
@@ -16,7 +16,7 @@ function BeforeEnter() {
 function App() {
     return (
         <div>
-            <TitleBar />
+            {/* <TitleBar /> */}
             <BeforeEnter />
         </div>
     )

@@ -11,7 +11,7 @@ const App: React.FC = () => {
     console.log('layout')
 
     return (
-        <Layout style={{ minHeight: 'calc(100vh - 60px)' }}>
+        <Layout style={{ minHeight: '100vh' }}>
             <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
                 <div className="logo" />
                 <MainMenu />

@@ -8,6 +8,7 @@ yarn-debug.log*
 yarn-error.log*
 .gitignore
 .npmrc
+/out/
 
 # Editor directories and files
 .idea

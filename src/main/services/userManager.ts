@@ -1,9 +1,6 @@
 import { ipcHelper } from '@electron-toolkit/utils'
 
 interface userdata {
-    isLogin: boolean
-    avatar: string
-    token: string
     [key: string]: unknown
 }
 class userManager {
@@ -16,11 +13,11 @@ class userManager {
             }
         })
 
-        ipcHelper.handle(
-            'get-userdata',
-            (_, key?: keyof typeof this.userdata | Array<keyof typeof this.userdata>) =>
-                this.getUserData(key)
+        ipcHelper.handle('get-userdata', (_, key?: keyof userdata | Array<keyof userdata>) =>
+            this.getUserData(key)
         )
+
+        ipcHelper.handle('clear-userdata', this.clearUserdata)
     }
 
     private userdata: userdata = {
@@ -29,9 +26,7 @@ class userManager {
         token: ''
     }
 
-    public getUserData(
-        key?: keyof typeof this.userdata | Array<keyof typeof this.userdata>
-    ): unknown {
+    public getUserData(key?: keyof userdata | Array<keyof userdata>): unknown {
         // 如果没有传入key，则返回全部userdata
         if (key === undefined) {
             return this.userdata
@@ -43,19 +38,24 @@ class userManager {
                     result[currentKey] = this.userdata[currentKey]
                     return result
                 },
-                {} as Pick<typeof this.userdata, keyof typeof this.userdata>
+                {} as Pick<userdata, keyof userdata>
             )
         }
         // 如果传入的是一个字符串，则返回userdata中对应的字段
         return this.userdata[key]
     }
 
-    public setUserdata(data) {
+    public setUserdata(data: userdata): void {
         this.userdata = {
             ...this.userdata,
             ...data
         }
     }
+
+    public clearUserdata() {
+        this.userdata = {}
+    }
+
     // 单实例
     public static init(): userManager {
         if (!userManager.instance) {

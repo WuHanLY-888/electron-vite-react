@@ -1,7 +1,15 @@
 import { ipcHelper } from '@electron-toolkit/utils'
 
 interface userdata {
-    [key: string]: unknown
+    // [key: string]: unknown
+    isLogin: boolean
+    realName?: string
+    nickName?: string
+    avatar?: string
+    token?: string
+    sex?: 'male' | 'female' | 'unknown'
+    id?: string
+    email?: string
 }
 class userManager {
     private constructor() {
@@ -21,9 +29,7 @@ class userManager {
     }
 
     private userdata: userdata = {
-        isLogin: false,
-        avatar: '',
-        token: ''
+        isLogin: false
     }
 
     public getUserData(key?: keyof userdata | Array<keyof userdata>): unknown {
@@ -33,13 +39,10 @@ class userManager {
         }
         // 如果传入的是一个数组，则返回userdata中对应的字段
         if (Array.isArray(key)) {
-            return key.reduce(
-                (result, currentKey) => {
-                    result[currentKey] = this.userdata[currentKey]
-                    return result
-                },
-                {} as Pick<userdata, keyof userdata>
-            )
+            return key.reduce((result, currentKey) => {
+                result[currentKey] = this.userdata[currentKey]
+                return result
+            }, {})
         }
         // 如果传入的是一个字符串，则返回userdata中对应的字段
         return this.userdata[key]
@@ -53,7 +56,9 @@ class userManager {
     }
 
     public clearUserdata() {
-        this.userdata = {}
+        this.userdata = {
+            isLogin: false
+        }
     }
 
     // 单实例

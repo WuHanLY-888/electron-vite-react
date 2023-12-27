@@ -25,7 +25,7 @@ class userManager {
             this.getUserData(key)
         )
 
-        ipcHelper.handle('clear-userdata', this.clearUserdata)
+        ipcHelper.handle('user-logout', this.logout)
     }
 
     private userdata: userdata = {
@@ -55,7 +55,7 @@ class userManager {
         }
     }
 
-    public clearUserdata() {
+    public logout() {
         this.userdata = {
             isLogin: false
         }

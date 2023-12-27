@@ -1,41 +1,19 @@
-import { app, shell, BrowserWindow } from 'electron'
-import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
-import configs from './config'
+import { app, BrowserWindow } from 'electron'
+import { electronApp, optimizer } from '@electron-toolkit/utils'
+import WindowManager from './services/windowManager'
 
 function AppReady(): void {
     // Create the browser window.
+    WindowManager.init()
 
-    const mainWindow = new BrowserWindow({
-        ...configs.browser,
-        width: 900,
-        height: 670,
-        show: false,
-        autoHideMenuBar: true,
-        ...(process.platform === 'linux' ? { icon } : {}),
-        webPreferences: {
-            ...configs.webPreferences,
-            preload: join(__dirname, '../preload/index.ts'),
-            sandbox: false
-        }
-    })
+    // mainWindow.on('ready-to-show', () => {
+    //     mainWindow.show()
+    // })
 
-    mainWindow.on('ready-to-show', () => {
-        mainWindow.show()
-    })
-
-    mainWindow.webContents.setWindowOpenHandler((details) => {
-        shell.openExternal(details.url)
-        return { action: 'deny' }
-    })
-
-    // 区分开发和生产环境，开发环境模块可热更新
-    if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-        mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
-    } else {
-        mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
-    }
+    // mainWindow.webContents.setWindowOpenHandler((details) => {
+    //     shell.openExternal(details.url)
+    //     return { action: 'deny' }
+    // })
 }
 
 // 程序准备就绪，可以使用一些api了

@@ -14,7 +14,7 @@ const withLoadingComponent = (comp: JSX.Element) => <React.Suspense>{comp}</Reac
 const routes = [
     {
         path: '/',
-        element: <Navigate to="/about" />
+        element: <Navigate to="/login" />
     },
     {
         path: '/',

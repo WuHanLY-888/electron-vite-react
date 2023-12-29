@@ -1,23 +1,25 @@
-import { useRoutes } from 'react-router-dom'
+import { RouterProvider, createHashRouter } from 'react-router-dom'
 import router from './router'
 // import TitleBar from './components/titleBar'
 // import BeforeEnter from './router/beforeEnter';
 
-function BeforeEnter() {
-    console.log('BeforeEnter')
+// function BeforeEnter() {
+//     console.log('BeforeEnter')
 
-    const Outlet = useRoutes(router)
-    // const location = useLocation()
-    // console.log(location)
+//     const Outlet = createHashRouter(router)
+//     // const location = useLocation()
+//     // console.log(location)
 
-    return Outlet
-}
+//     return Outlet
+// }
 
 function App() {
+    const routers = createHashRouter(router)
     return (
         <div>
             {/* <TitleBar /> */}
-            <BeforeEnter />
+            {/* <BeforeEnter /> */}
+            <RouterProvider router={routers} />
         </div>
     )
 }

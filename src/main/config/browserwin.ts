@@ -6,7 +6,8 @@ import { join } from 'path'
 export const webPreferences: WebPreferences = {
     preload: join(__dirname, '../preload/index.js'),
     devTools: is.dev,
-    sandbox: false
+    sandbox: false,
+    webSecurity: false
 }
 const config: BrowserWindowConstructorOptions = {
     titleBarStyle: 'hidden',

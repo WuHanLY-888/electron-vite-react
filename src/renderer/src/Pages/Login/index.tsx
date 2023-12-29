@@ -2,6 +2,7 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import { Input, Space, Button, message } from 'antd'
 import styles from './login.module.less'
 import 'antd/dist/antd.css' // or 'antd/dist/antd.less'
+import { generateCaptcha } from '@renderer/utils/getCaptchaImage'
 
 const view = (): JSX.Element => {
     useEffect(() => {
@@ -13,6 +14,7 @@ const view = (): JSX.Element => {
     const [captchaVal, setCaptchaVal] = useState('') // 定义用户输入验证码这个变量
     // 定义一个变量保存验证码图片信息
     const [captchaImg, setCaptchaImg] = useState('')
+    const [captchaText, setCaptchaText] = useState('')
 
     const usernameChange = (e: ChangeEvent<HTMLInputElement>): void => {
         // 获取用户输入的用户名
@@ -29,6 +31,16 @@ const view = (): JSX.Element => {
     // 点击登录按钮的事件函数
     const gotoLogin = async () => {
         console.log('用户输入的用户名，密码，验证码分别是：', usernameVal, passwordVal, captchaVal)
+        console.log(captchaVal.trim())
+        console.log(captchaText)
+
+        if (captchaVal != captchaText) {
+            message.warning('验证码输入错误！')
+            getCaptchaImg()
+            return
+        }
+        console.log('验证码正确')
+
         // 验证是否有空值
         if (!usernameVal.trim() || !passwordVal.trim() || !captchaVal.trim()) {
             message.warning('请完整输入信息！')
@@ -37,16 +49,19 @@ const view = (): JSX.Element => {
     }
 
     function getCaptchaImg() {
-        console.log('hello')
-        setCaptchaImg('')
+        const res = generateCaptcha()
+        console.log(res.text)
+        setCaptchaText(res.text)
+        setCaptchaImg(res.url)
     }
 
     return (
         <div className={styles.loginPage}>
+            <div className={styles.top}></div>
             {/* 登录盒子 */}
-            <div className={styles.loginBox + ' loginbox'}>
+            <div className={styles.loginbox}>
                 {/* 标题部分 */}
-                <div className={styles.hello}>
+                <div className={styles.title}>
                     <h1>react&nbsp;·&nbsp;通用后台系统</h1>
                     <p>Strive Everyday</p>
                 </div>
@@ -56,9 +71,9 @@ const view = (): JSX.Element => {
                         <Input placeholder="用户名" onChange={usernameChange} />
                         <Input.Password placeholder="密码" onChange={passwordChange} />
                         {/* 验证码盒子 */}
-                        <div className="captchaBox">
+                        <div className={styles.captchaBox}>
                             <Input placeholder="验证码" onChange={captchaChange} />
-                            <div className="captchaImg" onClick={getCaptchaImg}>
+                            <div className={styles.captchaImg} onClick={getCaptchaImg}>
                                 <img height="38" src={captchaImg} alt="" />
                             </div>
                         </div>

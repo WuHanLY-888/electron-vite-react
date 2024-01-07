@@ -1,5 +1,6 @@
 import { RouterProvider, createHashRouter } from 'react-router-dom'
 import router from './router'
+import 'antd/dist/reset.css'
 // import TitleBar from './components/titleBar'
 // import BeforeEnter from './router/beforeEnter';
 

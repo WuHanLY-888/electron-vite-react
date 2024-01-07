@@ -1,10 +1,11 @@
 import { ChangeEvent, useEffect, useState } from 'react'
-import { Input, Space, Button, message } from 'antd'
+import { Input, Space, Button, message, Card } from 'antd'
 import styles from './login.module.less'
-import 'antd/dist/antd.css' // or 'antd/dist/antd.less'
+// import 'antd/dist/antd.css' // or 'antd/dist/antd.less'
 import { generateCaptcha } from '@renderer/utils/getCaptchaImage'
+import QRCodeLogin from './QRCodeLogin'
 
-const view = (): JSX.Element => {
+const View = (): JSX.Element => {
     useEffect(() => {
         getCaptchaImg()
     }, [])
@@ -57,7 +58,6 @@ const view = (): JSX.Element => {
 
     return (
         <div className={styles.loginPage}>
-            <div className={styles.top}></div>
             {/* 登录盒子 */}
             <div className={styles.loginbox}>
                 {/* 标题部分 */}
@@ -87,4 +87,42 @@ const view = (): JSX.Element => {
     )
 }
 
-export default view
+const loginBox: React.FC = () => {
+
+    const contentList: Record<string, React.ReactNode> = {
+        tab1: <View />,
+        tab2: <QRCodeLogin></QRCodeLogin>,
+    };
+    const [activeTabKey, setActiveTabKey] = useState<string>('tab1');
+    const tabList = [
+        {
+            key: 'tab1',
+            tab: '账号密码登陆',
+        },
+        {
+            key: 'tab2',
+            tab: '二维码登陆',
+        },
+    ];
+
+    const onTabChange = (e) => {
+        setActiveTabKey(e)
+    }
+    return (
+        <div>
+            <div className={styles.top}></div>
+            <Card
+                style={{ width: '80%', margin: '0 auto' }}
+                // title="登 陆"
+                tabList={tabList}
+                activeTabKey={activeTabKey}
+                onTabChange={onTabChange}
+            >
+                {contentList[activeTabKey]}
+            </Card>
+        </div>
+    )
+}
+
+
+export default loginBox

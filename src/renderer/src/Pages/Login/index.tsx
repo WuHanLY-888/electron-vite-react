@@ -1,17 +1,18 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import { Input, Space, Button, message, Card } from 'antd'
 import styles from './login.module.less'
-// import 'antd/dist/antd.css' // or 'antd/dist/antd.less'
 import { generateCaptcha } from '@renderer/utils/getCaptchaImage'
 import QRCodeLogin from './QRCodeLogin'
 
+
+const usernamelist = ['amdin']
 const View = (): JSX.Element => {
     useEffect(() => {
         getCaptchaImg()
     }, [])
     // 获取用户输入的信息
-    const [usernameVal, setUsernameVal] = useState('') // 定义用户输入用户名这个变量
-    const [passwordVal, setPasswordVal] = useState('') // 定义用户输入密码这个变量
+    const [usernameVal, setUsernameVal] = useState('amdin') // 定义用户输入用户名这个变量
+    const [passwordVal, setPasswordVal] = useState('amdin') // 定义用户输入密码这个变量
     const [captchaVal, setCaptchaVal] = useState('') // 定义用户输入验证码这个变量
     // 定义一个变量保存验证码图片信息
     const [captchaImg, setCaptchaImg] = useState('')
@@ -31,29 +32,36 @@ const View = (): JSX.Element => {
     }
     // 点击登录按钮的事件函数
     const gotoLogin = async () => {
-        console.log('用户输入的用户名，密码，验证码分别是：', usernameVal, passwordVal, captchaVal)
-        console.log(captchaVal.trim())
-        console.log(captchaText)
-
-        if (captchaVal != captchaText) {
+        if (captchaVal.toLowerCase() != captchaText.toLowerCase()) {
             message.warning('验证码输入错误！')
             getCaptchaImg()
             return
         }
-        console.log('验证码正确')
 
         // 验证是否有空值
         if (!usernameVal.trim() || !passwordVal.trim() || !captchaVal.trim()) {
             message.warning('请完整输入信息！')
             return
         }
+
+        if (usernameVal ==='admin' && passwordVal === 'admin') {
+            console.log('密码输入正确');
+            window.ipc.invoke('user-login')
+        } else {
+            message.warning('账号或密码输入错误！')
+        }
     }
 
     function getCaptchaImg() {
         const res = generateCaptcha()
-        console.log(res.text)
+
         setCaptchaText(res.text)
         setCaptchaImg(res.url)
+        
+        if (import.meta.env.MODE === 'development') {
+            setCaptchaVal(res.text)
+        }
+
     }
 
     return (
@@ -71,12 +79,14 @@ const View = (): JSX.Element => {
                         <Input placeholder="用户名" onChange={usernameChange} />
                         <Input.Password placeholder="密码" onChange={passwordChange} />
                         {/* 验证码盒子 */}
-                        <div className={styles.captchaBox}>
+                        {/* <div className={styles.captchaBox}> */}
+                        <Space size="large" style={{ display: 'flex' }}>
                             <Input placeholder="验证码" onChange={captchaChange} />
                             <div className={styles.captchaImg} onClick={getCaptchaImg}>
                                 <img height="38" src={captchaImg} alt="" />
                             </div>
-                        </div>
+                        </Space>
+                        {/* </div> */}
                         <Button type="primary" className="loginBtn" block onClick={gotoLogin}>
                             登录
                         </Button>

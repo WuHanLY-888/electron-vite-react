@@ -1,4 +1,6 @@
 import { ipcHelper } from '@electron-toolkit/utils'
+import WindowManager from './windowManager'
+
 
 interface userdata {
     // [key: string]: unknown
@@ -24,6 +26,8 @@ class userManager {
         ipcHelper.handle('get-userdata', (_, key?: keyof userdata | Array<keyof userdata>) =>
             this.getUserData(key)
         )
+
+        ipcHelper.handle('user-login', this.userlogin)
 
         ipcHelper.handle('user-logout', this.logout)
     }
@@ -54,7 +58,16 @@ class userManager {
             ...data
         }
     }
+    public userlogin () {
+        console.log('用户登陆');
+        
+        const win = WindowManager.init()
+        const main = win.mainWin() 
+        // 创建主窗口
+        main.show()
+        win.loginWindow?.destroy()
 
+    }
     public logout() {
         this.userdata = {
             isLogin: false

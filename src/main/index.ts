@@ -1,14 +1,16 @@
 import { app, BrowserWindow } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import WindowManager from './services/windowManager'
+import ipcMainFun from './services/ipcMain'
 
 function AppReady(): void {
     // Create the browser window.
-    WindowManager.init()
+    const win = WindowManager.init()
 
+    ipcMainFun(win)
     // mainWindow.on('ready-to-show', () => {
     //     mainWindow.show()
-    // })
+    // })         
 
     // mainWindow.webContents.setWindowOpenHandler((details) => {
     //     shell.openExternal(details.url)

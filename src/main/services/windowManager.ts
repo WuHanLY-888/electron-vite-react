@@ -21,17 +21,17 @@ class WindowManager {
     public mainWindow: BrowserWindowInit = null
     public loginWindow: BrowserWindowInit = null
 
-    mainWin() {
+    mainWin(): BrowserWindow {
         if (!this.mainWindow) {
             this.mainWindow = new BrowserWindow(configs.browser)
-            this.mainWindow.loadURL(baseURL)
+            this.mainWindow.loadURL(baseURL + '#about')
         }
         return this.mainWindow
     }
-    loginWin() {
+    loginWin(): BrowserWindow {
         if (!this.loginWindow) {
             this.loginWindow = new BrowserWindow(configs.browser)
-            this.loginWindow.loadURL(baseURL + '/login')
+            this.loginWindow.loadURL(baseURL + '#login')
         }
         return this.loginWindow
     }
